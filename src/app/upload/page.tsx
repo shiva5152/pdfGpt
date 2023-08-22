@@ -87,17 +87,24 @@ const Upload = () => {
         
       </div>
       <div className="NextBtn my-8">
-        {
+        {/* {
           isUploaded && (
             <button
             // disabled={false}
             onClick={handleNext}
             className=" text-white bg-gray-600 font-medium rounded-md text-sm w-full sm:w-auto block px-5 py-2.5 text-center"
           >
-            Next
+            Go To Chat Window
           </button>
           )
-        }
+        } */}
+         <button
+            // disabled={false}
+            onClick={handleNext}
+            className=" text-white bg-gray-600 font-medium rounded-md text-sm w-full sm:w-auto block px-5 py-2.5 text-center"
+          >
+            Go To Chat Window
+          </button>
       </div>
     </div>
   );

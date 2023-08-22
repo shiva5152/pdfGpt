@@ -44,12 +44,13 @@ const page = () => {
     }
   };
   const  handleSubmit= async()=>{
+    setUserText("");
     console.log(userText);
     setLoading(true);
    const res=await postData("https://multipdf.onrender.com/ask",{query:userText});
     setLoading(false);
     setChatLog(prev=>[...prev,{userMessage:userText,gptResponse:res.result.answer}])
-    // setUserText("");
+    
   }
   useEffect(() => {
     scrollToBottom();
@@ -60,7 +61,7 @@ const page = () => {
     style={{ height: "calc(100vh - 5.5rem)" }}
     className="bg-gray-100 relative items-center overflow-y-auto flex flex-col p-[1rem]">
       {/* <h1 className="text-[3rem] text-[#4b5563] font-semibold m-10">LawGpt</h1> */}
-      <h1 className="text-[2rem] text-[#4b5563] font-semibold -mt-2">PolygonGpt</h1>
+      <h1 className="text-[2rem] text-[#4b5563] font-semibold -mt-2">PdfGpt</h1>
 
       <div ref={chatContainerRef} className="chatSection flex flex-col gap-3 w-[80%] m-5">
         {chatLog?.length>0 && (
@@ -80,7 +81,7 @@ const page = () => {
           <div className="buttonSvg pl-16 w-[50vw] flex">
             <input
               className="w-full text-white p-4 bg-gray-600 placeholder-[#D3D3D3] rounded-md"
-              placeholder="Ask the PolygonGpt"
+              placeholder="Ask the PdfGpt"
               type="text"
               name="text"
               value={userText}
