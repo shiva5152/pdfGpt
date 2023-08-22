@@ -1,4 +1,5 @@
 "use client"
+import {useEffect} from 'react'
 import Image from 'next/image'
 import Loader from '@/components/Loder';
 import { useRouter } from 'next/navigation'
@@ -6,7 +7,9 @@ import { useRouter } from 'next/navigation'
 export default function Home() {
 
   const router=useRouter();
-  router.push('/chat');
+  useEffect(()=>{
+    router.push("/chat")
+  },[])
 
 
   return (
