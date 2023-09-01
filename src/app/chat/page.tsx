@@ -1,6 +1,8 @@
 "use client";
-import React, { useState ,useRef,useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Loader from "@/components/Loder";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 const ChatMessage = ({ message }: { message: any }) => {
   return (
     <div className="flex flex-col gap-3">
@@ -16,10 +18,8 @@ const ChatMessage = ({ message }: { message: any }) => {
         </div>
         <p className="font-semibold text-gray-300">{message.gptResponse}</p>
       </div>
-      
 
       {/* lorem */}
-      
     </div>
   );
 };
@@ -38,44 +38,60 @@ const page = () => {
     const container = chatContainerRef.current as HTMLDivElement | null;
     if (container) {
       const scrollHeight = container.scrollHeight;
-    const clientHeight = container.clientHeight;
-      container.scrollTo({ top:scrollHeight - clientHeight , behavior: "smooth" });
+      const clientHeight = container.clientHeight;
+      container.scrollTo({
+        top: scrollHeight - clientHeight,
+        behavior: "smooth",
+      });
       // container.scrollTop = container.scrollHeight;
     }
   };
-  const  handleSubmit= async()=>{
+  const { user } = useAuth();
+  const handleSubmit = async () => {
     setUserText("");
     console.log(userText);
     setLoading(true);
-   const res=await postData("https://multipdf.onrender.com/ask",{query:userText});
+    const res = await postData("http://localhost:5000/ask", {
+      query: userText,
+      email: user?.email,
+    });
+    console.log(res);
     setLoading(false);
-    setChatLog(prev=>[...prev,{userMessage:userText,gptResponse:res.result.answer}])
-    
-  }
-  useEffect(() => {
-    scrollToBottom();
-  }, [loading]);
+    setChatLog((prev) => [
+      ...prev,
+      { userMessage: userText, gptResponse: res.result.text },
+    ]);
+  };
+
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   // router.push("/login");
+  // }, []);
 
   return (
-    <section id="chat-container"
-    style={{ height: "calc(100vh - 5.5rem)" }}
-    className="bg-gray-100 relative items-center overflow-y-auto flex flex-col p-[1rem]">
+    <section
+      id="chat-container"
+      style={{ height: "calc(100vh - 5.5rem)" }}
+      className="bg-gray-100 relative items-center overflow-y-auto flex flex-col p-[1rem]"
+    >
       {/* <h1 className="text-[3rem] text-[#4b5563] font-semibold m-10">LawGpt</h1> */}
-      <h1 className="text-[2rem] text-[#4b5563] font-semibold -mt-2">PdfGpt</h1>
 
-      <div ref={chatContainerRef} className="chatSection flex flex-col gap-3 w-[80%] m-5">
-        {chatLog?.length>0 && (
-          chatLog.map((obj,index)=>{
-            return <ChatMessage key={index} message={obj}/>
-          })
-        )}
+      <div
+        ref={chatContainerRef}
+        className="chatSection flex flex-col gap-3 w-[80%] mt-[5rem] m-5"
+      >
+        {chatLog?.length > 0 &&
+          chatLog.map((obj, index) => {
+            return <ChatMessage key={index} message={obj} />;
+          })}
         {loading && (
           <div className="w-full mt-10 flex justify-center items-center">
-            <Loader/>
+            <Loader />
           </div>
         )}
       </div>
-      
+
       <div className="fixed bottom-0 h-[5.5rem] bg-slate-500 border-t-[1px] border-gray-100 w-full bg-blur p-4">
         <div className="input  w-full text-center flex items-center justify-center flex-col">
           <div className="buttonSvg pl-16 w-[50vw] flex">
@@ -89,7 +105,11 @@ const page = () => {
               id="questionInput"
             />
 
-            <button onClick={handleSubmit} id="sendButton" className="relative -left-20 pl-10">
+            <button
+              onClick={handleSubmit}
+              id="sendButton"
+              className="relative -left-20 pl-10"
+            >
               <svg
                 stroke="#D3D3D3"
                 fill="none"
@@ -113,12 +133,12 @@ const page = () => {
   );
 };
 
-const postData = async (url:string, data:any) => {
+const postData = async (url: string, data: any) => {
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -131,8 +151,8 @@ const postData = async (url:string, data:any) => {
     console.log(responseData);
     return responseData;
   } catch (error) {
-    console.error('Error:', error);
-    throw error; 
+    console.error("Error:", error);
+    throw error;
   }
 };
 export default page;
