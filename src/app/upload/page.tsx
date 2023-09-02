@@ -17,6 +17,8 @@ const Upload = () => {
   const [isUploaded, setIsUploaded] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
+    // const file = acceptedFiles;
+    // const
     setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
   }, []);
   const handleUpload = async () => {
@@ -25,17 +27,17 @@ const Upload = () => {
       return;
     }
     setLoading(true);
-    // await uploadFiles(files);
-    if (user && user.email) {
-      await uploadFileNodeServer(files[0], user?.email);
-    } else {
-      alert("user undefined");
-    }
+    await uploadFiles(files);
+    // if (user && user.email) {
+    //   await uploadFileNodeServer(files[0], user?.email);
+    // } else {
+    //   alert("user undefined");
+    // }
     // alert("file is Uploaded");
     // UploadData(file[0]);
     setIsUploaded(true);
     setLoading(false);
-    // setFiles([]);
+    setFiles([]);
   };
   const handleNext = () => {
     router.push("/chat");
@@ -131,7 +133,7 @@ const uploadFiles = async (files: File[]) => {
     });
 
     // Make the POST request
-    const response = await fetch("http://localhost:5000/upload", {
+    const response = await fetch("https://multipdf.onrender.com/extract", {
       method: "POST",
       body: formData,
       // headers: {
@@ -150,33 +152,33 @@ const uploadFiles = async (files: File[]) => {
     console.error("Error uploading files:", error);
   }
 };
-const uploadFileNodeServer = async (file: File, email: string) => {
-  try {
-    const formData = new FormData();
-    console.log(file);
+// const uploadFileNodeServer = async (file: File, email: string) => {
+//   try {
+//     const formData = new FormData();
+//     console.log(file);
 
-    // Append each selected file to the FormData
-    formData.append("pdfFile", file);
+//     // Append each selected file to the FormData
+//     formData.append("pdfFile", file);
 
-    // Make the POST request
-    const response = await fetch(`http://localhost:5000/upload/${email}`, {
-      method: "post",
-      body: formData,
-      // headers: {
-      //   "Content-Type": "multipart/form-data",
-      // },
-    });
+//     // Make the POST request
+//     const response = await fetch(`http://localhost:5000/upload/${email}`, {
+//       method: "post",
+//       body: formData,
+//       // headers: {
+//       //   "Content-Type": "multipart/form-data",
+//       // },
+//     });
 
-    if (response.ok) {
-      const result = await response.json(); // Parse the JSON response
-      console.log(result);
-      // Perform any additional actions after successful upload
-    } else {
-      console.error("File upload failed");
-    }
-  } catch (error) {
-    console.error("Error uploading files:", error);
-  }
-};
+//     if (response.ok) {
+//       const result = await response.json(); // Parse the JSON response
+//       console.log(result);
+//       // Perform any additional actions after successful upload
+//     } else {
+//       console.error("File upload failed");
+//     }
+//   } catch (error) {
+//     console.error("Error uploading files:", error);
+//   }
+// };
 
 export default Upload;

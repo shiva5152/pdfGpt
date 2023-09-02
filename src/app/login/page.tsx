@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import Loader from "@/components/Loder";
+
 const page = () => {
   const { userLoading, user, login, signup, loginWithGoogle, logout } =
     useAuth();
@@ -31,7 +32,6 @@ const page = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("called");
       router.push("/chat");
     }
   }, [user]);
@@ -46,7 +46,7 @@ const page = () => {
     <div className="w-full flex h-screen">
       <div className="w-[50%] h-full flex flex-col items-center p-4">
         {/* hero */}
-        <div className="w-[16rem] h-[13rem]">
+        <div className="w-[16rem] h-[10rem]">
           {/* <img className="object-contain" src="Logo.png" alt="" /> */}
         </div>
         <p className="text-[2rem] font-semibold">Welcome Back</p>
@@ -230,7 +230,17 @@ const page = () => {
           </button>
         </div>
       </div>
-      <div className="w-[50%] h-full bg-gray-600">{/* img */}</div>
+      <div className="w-[50%] h-full bg-gray-600 flex items-center justify-center">
+        <div className="w-[90%]  rounded-md">
+          <Image
+            src={"/pdf.png"}
+            className="object-contain  mx-auto rounded-lg"
+            alt="pdfGpt"
+            width={600}
+            height={600}
+          />
+        </div>
+      </div>
     </div>
   );
 };

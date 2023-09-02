@@ -2,3 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+.image {
+  width: 100%;
+  max-width: 300px;
+  border: solid 10px #fff;
+  border-radius: 15px;
+
+  animation: up-down 1.4s infinite ease-in-out alternate;
+}
+
+@keyframes up-down {
+  from {
+    transform: translatey(0px);
+  }
+  to {
+    transform: translatey(-20px);
+  }
+}
+
+/* .text_bg {
+  background-image: url(pdf.png);
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 1px;
+  font-size: 1px;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: "Steelfish Rg", "helvetica neue", helvetica, arial, sans-serif;
+  font-weight: 800;
+  -webkit-font-smoothing: antialiased;
+} */

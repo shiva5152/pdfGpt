@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Loader from "@/components/Loder";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 const ChatMessage = ({ message }: { message: any }) => {
@@ -8,13 +9,37 @@ const ChatMessage = ({ message }: { message: any }) => {
     <div className="flex flex-col gap-3">
       <div className="question flex bg-gray-300 p-5 rounded">
         <div className="avatar">
-          <div className="h-6 w-6 bg-green-500 rounded-full mr-7"></div>
+          {/* <div className="h-6 w-6 bg-green-500 rounded-full mr-7"></div> */}
+          <div className="h-6 w-6 rounded-full mr-7">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </div>
         </div>
         <p className="font-semibold text-[#4f4d4d]">{message.userMessage}</p>
       </div>
       <div className="answer flex bg-gray-600 p-5 rounded">
         <div className="avatar">
-          <div className="h-6 w-6 bg-gray-100 rounded-full mr-7"></div>
+          <div className="h-6 w-6 bg-gray-100 rounded-full mr-7">
+            <Image
+              src={"/pdf.png"}
+              className="object-contain  mx-auto rounded-lg"
+              alt="pdfGpt"
+              width={24}
+              height={24}
+            />
+          </div>
         </div>
         <p className="font-semibold text-gray-300">{message.gptResponse}</p>
       </div>
@@ -51,19 +76,26 @@ const page = () => {
     setUserText("");
     console.log(userText);
     setLoading(true);
-    const res = await postData("http://localhost:5000/ask", {
+    const res = await postData("https://multipdf.onrender.com/ask", {
       query: userText,
-      email: user?.email,
+      // email: user?.email,
     });
     console.log(res);
     setLoading(false);
     setChatLog((prev) => [
       ...prev,
-      { userMessage: userText, gptResponse: res.result.text },
+      { userMessage: userText, gptResponse: res.result.answer },
+      // { userMessage: userText, gptResponse: res.result.text },
     ]);
   };
 
   const router = useRouter();
+  const handleEnterKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      // The "Enter" key was pressed
+      handleSubmit();
+    }
+  };
 
   // useEffect(() => {
   //   // router.push("/login");
@@ -101,6 +133,7 @@ const page = () => {
               type="text"
               name="text"
               value={userText}
+              onKeyDown={handleEnterKeyPress}
               onChange={(e) => setUserText(e.target.value)}
               id="questionInput"
             />
@@ -151,6 +184,9 @@ const postData = async (url: string, data: any) => {
     console.log(responseData);
     return responseData;
   } catch (error) {
+    if (error instanceof Error && error.message.includes("429")) {
+      alert("Rate limit, 2 queries per minute only.");
+    }
     console.error("Error:", error);
     throw error;
   }

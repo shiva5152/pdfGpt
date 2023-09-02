@@ -2,13 +2,16 @@
 import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+
 const Navbar = () => {
   const { logout, user } = useAuth();
+  const router = useRouter();
   return (
-    <header className="bg-gray-600 z-10 p-4 absolute w-[100vw]">
+    <header className="bg-gray-600 z-10 p-4 py-3 absolute w-[100vw]">
       <nav className="flex items-center justify-between m-2">
         {/* Logo */}
-        <div className="text-white text-2xl font-bold">PdfGpt</div>
+        <div className="text-white  text-2xl font-bold">PdfGpt</div>
 
         {/* Navigation Links */}
         <ul className="flex space-x-4 items-center justify-center ">
@@ -29,12 +32,30 @@ const Navbar = () => {
               />
             </svg>
           </li>
-          <li className="bg-gray-800 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded">
+          <li
+            className={`bg-gray-800 hover:bg-gray-400 text-white font-bold px-4 rounded`}
+          >
             <Link
               href="/chat"
-              className="text-white py-2 px-4 hover:text-gray-300"
+              className="text-white flex py-2 px-2 hover:text-gray-300"
             >
-              Chat
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#FFD700"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                  />
+                </svg>
+              </span>
+              <span> Chat</span>
             </Link>
           </li>
           <li className="bg-gray-800 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded">

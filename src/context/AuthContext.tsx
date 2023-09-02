@@ -61,28 +61,6 @@ export const AuthContextProvider = ({
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [userLoading, setUserLoading] = useState(true);
-  console.log(user);
-
-  if (user) {
-  }
-
-  useEffect(() => {
-    setUserLoading(true);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser({
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-        });
-      } else {
-        setUser(null);
-      }
-      setUserLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   const signup = async (email: string, password: string) => {
     try {
@@ -91,13 +69,13 @@ export const AuthContextProvider = ({
         email,
         password
       );
-      console.log(result);
-      setUser(result);
+
       const tempUser = {
         uid: result?.user?.uid,
         displayName: result?.user?.displayName as string,
         email: result?.user?.email as string,
       };
+      setUser(tempUser);
     } catch (error: any) {
       console.log(error);
       alert(error.message);
@@ -107,8 +85,12 @@ export const AuthContextProvider = ({
   const login = async (email: string, password: string) => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log(result);
-      setUser(result);
+      const tempUser = {
+        uid: result?.user?.uid,
+        displayName: result?.user?.displayName as string,
+        email: result?.user?.email as string,
+      };
+      setUser(tempUser);
     } catch (error: any) {
       console.log(error);
       alert(error.message);
@@ -118,12 +100,13 @@ export const AuthContextProvider = ({
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      setUser(result);
+
       const tempUser = {
         uid: result?.user?.uid,
         displayName: result?.user?.displayName as string,
         email: result?.user?.email as string,
       };
+      setUser(tempUser);
 
       console.log(result);
     } catch (error) {
@@ -136,6 +119,23 @@ export const AuthContextProvider = ({
     localStorage.removeItem("user");
     await signOut(auth);
   };
+  useEffect(() => {
+    setUserLoading(true);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+        });
+      } else {
+        setUser(null);
+      }
+    });
+    setUserLoading(false);
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <AuthContext.Provider
