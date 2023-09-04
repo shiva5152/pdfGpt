@@ -7,13 +7,18 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  sendSignInLinkToEmail,
   User,
+  signInWithEmailLink,
+  isSignInWithEmailLink,
+  sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "@/config/firebase";
 interface myUser {
   displayName: string;
   email: string;
   uid: string;
+  emailVerified: Boolean;
 }
 interface AuthContextType {
   loading: Boolean;
@@ -23,6 +28,8 @@ interface AuthContextType {
   signup: (username: string, password: string) => void;
   loginWithGoogle: () => void;
   logout: () => void;
+  handleSignInWithEmailLink: (url: string) => void;
+  sendLinkSign: (email: string) => void;
 }
 const initialAuthState: AuthContextType = {
   user: null,
@@ -32,6 +39,8 @@ const initialAuthState: AuthContextType = {
   signup: (username: string, password: string) => {},
   loginWithGoogle: () => {},
   logout: () => {},
+  handleSignInWithEmailLink: () => {},
+  sendLinkSign: () => {},
 };
 const AuthContext = createContext<AuthContextType>(initialAuthState);
 
@@ -74,7 +83,10 @@ export const AuthContextProvider = ({
         uid: result?.user?.uid,
         displayName: result?.user?.displayName as string,
         email: result?.user?.email as string,
+        emailVerified: result?.user?.emailVerified,
       };
+      if (result?.user) sendEmailVerification(result?.user);
+      alert("check your in box we have send you email verification Link");
       setUser(tempUser);
     } catch (error: any) {
       console.log(error);
@@ -89,6 +101,7 @@ export const AuthContextProvider = ({
         uid: result?.user?.uid,
         displayName: result?.user?.displayName as string,
         email: result?.user?.email as string,
+        emailVerified: result?.user?.emailVerified,
       };
       setUser(tempUser);
     } catch (error: any) {
@@ -105,8 +118,13 @@ export const AuthContextProvider = ({
         uid: result?.user?.uid,
         displayName: result?.user?.displayName as string,
         email: result?.user?.email as string,
+        emailVerified: result?.user?.emailVerified,
       };
       setUser(tempUser);
+      addUserToDb({
+        name: result?.user?.displayName as string,
+        email: result?.user?.email as string,
+      });
 
       console.log(result);
     } catch (error) {
@@ -114,10 +132,67 @@ export const AuthContextProvider = ({
     }
   };
 
+  const sendLinkSign = async (email: string) => {
+    try {
+      await sendSignInLinkToEmail(auth, email, {
+        url: "http://localhost:3000/login",
+        handleCodeInApp: true,
+      });
+      alert("check your in box we have send you email verification Link");
+
+      window.localStorage.setItem("emailForSignIn", email);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSignInWithEmailLink = async (url: string) => {
+    console.log("called");
+    if (isSignInWithEmailLink(auth, url)) {
+      console.log("in the auth");
+      let email = window.localStorage.getItem("emailForSignIn") as string;
+      if (!email) {
+        email = window.prompt(
+          "Please provide your email for confirmation"
+        ) as string;
+      }
+
+      try {
+        const result = await signInWithEmailLink(
+          auth,
+          email,
+          window.location.href
+        );
+        console.log(result);
+        window.localStorage.removeItem("emailForSignIn");
+        // Dispatch an action to handle the successful sign-in, e.g., update user in Redux store
+      } catch (error) {
+        // Dispatch an action to handle the error, e.g., display error message
+        console.log(error);
+      }
+    }
+  };
+
   const logout = async () => {
     setUser(null);
     localStorage.removeItem("user");
     await signOut(auth);
+  };
+  const addUserToDb = async (postData: { name: string; email: string }) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/v1/user/addUser",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postData),
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log("An error occurred:", error);
+    }
   };
   useEffect(() => {
     setUserLoading(true);
@@ -127,7 +202,9 @@ export const AuthContextProvider = ({
           uid: user.uid,
           email: user.email,
           displayName: user.displayName,
+          emailVerified: user.emailVerified,
         });
+        // console.log(user);
       } else {
         setUser(null);
       }
@@ -146,6 +223,8 @@ export const AuthContextProvider = ({
         signup,
         loginWithGoogle,
         logout,
+        handleSignInWithEmailLink,
+        sendLinkSign,
         loading,
       }}
     >

@@ -7,8 +7,16 @@ import { useAuth } from "@/context/AuthContext";
 import Loader from "@/components/Loder";
 
 const page = () => {
-  const { userLoading, user, login, signup, loginWithGoogle, logout } =
-    useAuth();
+  const {
+    userLoading,
+    user,
+    sendLinkSign,
+    login,
+    signup,
+    loginWithGoogle,
+    logout,
+    handleSignInWithEmailLink,
+  } = useAuth();
   const router = useRouter();
 
   const [mode, setMode] = useState(true);
@@ -28,10 +36,13 @@ const page = () => {
     } else {
       signup(email, password);
     }
+    setEMail("");
+    setPassword("");
+    // sendLinkSign(email);
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && user.emailVerified) {
       router.push("/chat");
     }
   }, [user]);
@@ -200,8 +211,15 @@ const page = () => {
             )}
           </div>
         </div>
+        {user && !user.emailVerified && (
+          <p className="border-gray-200 md:w-[50%] text-center text-[0.9rem] font-light  italic border-2 rounded-lg flex justify-center items-center px-4 py-2 mt-5">
+            Your account has been successfully created, Please verify your email
+            and reload this page to proceed further.
+          </p>
+        )}
         <div className="mt-5">
           <button
+            disabled={user ? true : false}
             className="px-[9.3rem] text-white rounded-lg py-3  bg-gray-600 text-center"
             type="submit"
             onClick={handleSubmit}
