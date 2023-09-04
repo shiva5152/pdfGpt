@@ -87,6 +87,10 @@ export const AuthContextProvider = ({
       };
       if (result?.user) sendEmailVerification(result?.user);
       alert("check your in box we have send you email verification Link");
+      addUserToDb({
+        name: result?.user?.displayName as string,
+        email: result?.user?.email as string,
+      });
       setUser(tempUser);
     } catch (error: any) {
       console.log(error);
