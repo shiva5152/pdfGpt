@@ -14,13 +14,13 @@ const layout = ({ children }: { children: React.ReactNode }) => {
     }
   }, [user]);
 
-  if (userLoading) {
-    return (
-      <div className="w-full flex justify-center items-center h-screen mx-auto">
-        <Loader />
-      </div>
-    );
-  }
+  // if (userLoading) {
+  //   return (
+  //     <div className="w-full flex justify-center items-center h-screen mx-auto">
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
   return <>{children}</>;
 };
 

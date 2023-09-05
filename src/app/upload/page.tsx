@@ -40,7 +40,7 @@ const Upload = () => {
     setFiles([]);
   };
   const handleNext = () => {
-    router.push("/chat");
+    router.push("/dashboard");
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -116,7 +116,7 @@ const Upload = () => {
           onClick={handleNext}
           className=" text-white bg-gray-600 font-medium rounded-md text-sm w-full sm:w-auto block px-5 py-2.5 text-center"
         >
-          Go To Chat Window
+          Go to Dashboard
         </button>
       </div>
     </div>
@@ -133,7 +133,7 @@ const uploadFiles = async (files: File[]) => {
     });
 
     // Make the POST request
-    const response = await fetch("https://multipdf.onrender.com/extract", {
+    const response = await fetch("https://doctalk-x05u.onrender.com/extract", {
       method: "POST",
       body: formData,
       // headers: {

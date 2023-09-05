@@ -2,24 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.image {
-  width: 100%;
-  max-width: 300px;
-  border: solid 10px #fff;
-  border-radius: 15px;
-
-  animation: up-down 1.4s infinite ease-in-out alternate;
-}
-
-@keyframes up-down {
-  from {
-    transform: translatey(0px);
-  }
-  to {
-    transform: translatey(-20px);
-  }
-}
-
 /* .text_bg {
   background-image: url(pdf.png);
   background-repeat: repeat;
@@ -34,3 +16,18 @@
   font-weight: 800;
   -webkit-font-smoothing: antialiased;
 } */
+
+.my-div::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+
+/* Define the scrollbar thumb (the draggable part) */
+.my-div::-webkit-scrollbar-thumb {
+  background-color: #888; /* Set the color of the thumb */
+  border-radius: 6px; /* Add rounded corners to the thumb */
+}
+
+/* Define the scrollbar track on hover */
+.my-div::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Change color on hover */
+}

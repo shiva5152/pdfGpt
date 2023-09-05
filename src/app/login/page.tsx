@@ -43,7 +43,7 @@ const page = () => {
 
   useEffect(() => {
     if (user && user.emailVerified) {
-      router.push("/chat");
+      router.push("/dashboard");
     }
   }, [user]);
 

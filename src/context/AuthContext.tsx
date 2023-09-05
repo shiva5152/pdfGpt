@@ -31,9 +31,12 @@ interface AuthContextType {
   handleSignInWithEmailLink: (url: string) => void;
   sendLinkSign: (email: string) => void;
 }
-
+// let userr: User | null = null;
+// if (window !== undefined) {
+//   userr = JSON.parse(window.localStorage.getItem("user") as string);
+// }
 const initialAuthState: AuthContextType = {
-  user: JSON.parse(window.localStorage.getItem("user") as string),
+  user: null,
   userLoading: false,
   loading: false,
   login: (username: string, password: string) => {},
@@ -68,9 +71,7 @@ export const AuthContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState<any>(
-    JSON.parse(window.localStorage.getItem("user") as string)
-  );
+  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [userLoading, setUserLoading] = useState(true);
 
