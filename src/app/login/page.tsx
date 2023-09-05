@@ -47,11 +47,13 @@ const page = () => {
     }
   }, [user]);
 
-  if (userLoading) {
-    <div className="w-full flex justify-center items-center h-screen mx-auto">
-      <Loader />
-    </div>;
-  }
+  // if (!user) {
+  //   return (
+  //     <div className="w-full flex justify-center items-center h-screen mx-auto">
+  //       <Loader />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="w-full flex h-screen">

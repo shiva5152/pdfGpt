@@ -31,8 +31,9 @@ interface AuthContextType {
   handleSignInWithEmailLink: (url: string) => void;
   sendLinkSign: (email: string) => void;
 }
+
 const initialAuthState: AuthContextType = {
-  user: null,
+  user: JSON.parse(window.localStorage.getItem("user") as string),
   userLoading: false,
   loading: false,
   login: (username: string, password: string) => {},
@@ -67,7 +68,9 @@ export const AuthContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(
+    JSON.parse(window.localStorage.getItem("user") as string)
+  );
   const [loading, setLoading] = useState(true);
   const [userLoading, setUserLoading] = useState(true);
 
@@ -107,7 +110,9 @@ export const AuthContextProvider = ({
         email: result?.user?.email as string,
         emailVerified: result?.user?.emailVerified,
       };
+
       setUser(tempUser);
+      window.localStorage.setItem("user", JSON.stringify(tempUser));
     } catch (error: any) {
       console.log(error);
       alert(error.message);
@@ -183,6 +188,7 @@ export const AuthContextProvider = ({
   };
   const addUserToDb = async (postData: { name: string; email: string }) => {
     try {
+      console.log("adduser called");
       const response = await fetch(
         "http://localhost:8000/api/v1/user/addUser",
         {
@@ -190,16 +196,19 @@ export const AuthContextProvider = ({
           headers: {
             "Content-Type": "application/json",
           },
+          mode: "cors",
           body: JSON.stringify(postData),
         }
       );
-      console.log(response);
+      const data = await response;
+      console.log("from response", data);
     } catch (error) {
       console.log("An error occurred:", error);
     }
   };
   useEffect(() => {
     setUserLoading(true);
+    console.log("from the auth", loading);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser({
@@ -214,6 +223,7 @@ export const AuthContextProvider = ({
       }
     });
     setUserLoading(false);
+    console.log("from the auth", loading);
 
     return () => unsubscribe();
   }, []);
