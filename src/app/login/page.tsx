@@ -56,7 +56,7 @@ const page = () => {
   // }
 
   return (
-    <div className="w-full flex h-screen">
+    <div className="w-full flex h-screen ">
       <div className="w-[50%] h-full flex flex-col items-center p-4">
         {/* hero */}
         <div className="w-[16rem] h-[10rem]">
@@ -222,7 +222,7 @@ const page = () => {
         <div className="mt-5">
           <button
             disabled={user ? true : false}
-            className="px-[9.3rem] text-white rounded-lg py-3  bg-gray-600 text-center"
+            className="px-[9.3rem] text-white rounded-lg py-3  bg-[#1a4fba] text-center"
             type="submit"
             onClick={handleSubmit}
           >
@@ -250,7 +250,7 @@ const page = () => {
           </button>
         </div>
       </div>
-      <div className="w-[50%] h-full bg-gray-600 flex items-center justify-center">
+      <div className="w-[50%] user-header h-full  flex items-center justify-center">
         <div className="w-[90%]  rounded-md">
           <Image
             src={"/pdf.png"}

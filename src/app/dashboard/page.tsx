@@ -1,158 +1,114 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import Image from "next/image";
-import Chat from "@/components/Chat";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-
 const page = () => {
-  const router = useRouter();
-  const { logout, user } = useAuth();
-  const handleUpload = () => {
-    router.push("/upload");
+  const { user } = useAuth();
+  const [inputValue, setInputValue] = useState("");
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
   };
-  const [tokens, setTokens] = useState<any>(null);
   return (
-    <div className="_container h-screen flex">
-      <div className="_navbar bg-[#1d232a]  w-1/12">
-        <div className="flex h-screen justify-center gap-14 flex-col items-center text-white font-bold">
-          <div>
+    <div className="w-[80%] bg-[#f2f8fd] p-20 px-10">
+      <div className="_route&&search w-full flex justify-between items-center">
+        <p className="text-[#6e7191] text-[1.25rem]">
+          <span className="text-[#6e7191]/50 ">Pages</span> / Dashboard
+        </p>
+        <div className="bg-white  gap-2  rounded-md p-3 flex justify-centre">
+          <span className="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              strokeWidth={1.5}
+              strokeWidth={1}
               stroke="currentColor"
-              className="w-6 h-6"
+              className="w-5 h-5"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
               />
             </svg>
-          </div>
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
-              />
-            </svg>
-          </div>
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-              />
-            </svg>
+          </span>
+          <input
+            type="text"
+            onChange={handleInputChange}
+            value={inputValue}
+            className="flex focus:outline-none flex-1 bg-transparent"
+            placeholder="Search"
+          />
+        </div>
+      </div>
+      <h1 className="mt-[14.75px] font-poppins text-[1.5rem] leading-[19px] text-[#060606]">
+        Dashboard Overview
+      </h1>
+      <div className="user-header z-[0] relative mt-[20.28px] w-full h-[210px] sm:h-[191px] text-white px-[20px] py-[15px] font-poppins">
+        <img
+          className="absolute z-[-1] h-[116%] bottom-0 right-[-50px] md:right-[20px] opacity-100 vsm:opacity-100"
+          src="/avatar.png"
+          alt="user"
+        />
+        <div className="z-[2] h-full flex flex-col justify-between">
+          <div className="">
+            <h1 className="text-[1.5rem] leading-[37px] text-[#CED5DC]">
+              Hello{" "}
+              <span className="text-white">
+                {user?.displayName?.split(" ")[0]}
+                <span>,</span>
+              </span>
+            </h1>
+            <p className="w-[50%] xmd:w-full mt-[20px] text-[1rem] leading-[1.2] text-[#D4E3F0]">
+              Have a nice day and don’t forget to checkout our Ai bots!
+            </p>
+            <div className="flex gap-3 mt-7">
+              <a
+                href="https://discord.com/api/oauth2/authorize?client_id=1148310552813256743&permissions=28582203096305&scope=bot"
+                className="cursor-pointer"
+                target="_blank"
+              >
+                <Image
+                  src="https://storage.googleapis.com/replit/images/1655786714330_691070e643aa6e650e52f6c3e26f3c33.png"
+                  alt="Telegram bot"
+                  width={50}
+                  height={50}
+                  className="rounded-full "
+                />
+              </a>
+              <a
+                href="https://t.me/QuesAns2_aiBot"
+                className="cursor-pointer"
+                target="_blank"
+              >
+                <Image
+                  width={50}
+                  height={50}
+                  src="https://flowxo.com/wp-content/uploads/2021/03/Telegram-Logo-512x512.png"
+                  alt="Telegram bot"
+                  className="rounded-full "
+                />
+              </a>
+            </div>
           </div>
         </div>
       </div>
-      <div className="_history bg-[#272d34] w-3/12">
-        <div className="flex justify-center pt-3">
-          <h1 className=" text-[2rem] text-white">History</h1>
-        </div>
-      </div>
-      <div className="_chat w-5/12 h-screen bg-[#edeff3]">
-        <Chat setTokens={setTokens} />
-      </div>
-      <div className="_profile w-3/12 bg-[#ffffff]">
-        <div className="mt-4 flex justify-end mr-2">
-          <button
-            // disabled={false}
-            onClick={logout}
-            className=" text-black bg-gray-300 font-medium rounded-md text-sm w-full sm:w-auto block px-5 py-2.5 text-center"
-          >
-            Logout
-          </button>
-        </div>
-        <div className="_imgContainer flex gap-1 flex-col mb-8 items-center mt-[2rem]">
-          <div className="_img mb-3">
-            <Image
-              src={"/user.jpg"}
-              className="rounded-full"
-              width={80}
-              height={80}
-              alt="profile pic"
-            />
+      <div className="_cards">
+        {/* <div className="bg-white rounded-lg p-4 flex-1">
+          <h1 className="text-lg text-slate-800">Total Usage:</h1>
+          <div className="w-[80%] mx-auto">
+            <canvas
+              role="img"
+              height="255"
+              width="255"
+              style={{
+                display: "block",
+                boxSizing: "border-box",
+                height: "204px",
+                width: "204px",
+              }}
+            ></canvas>
           </div>
-          <p className="font-semibold">{user?.displayName}</p>
-          <p className="font-light text-gray-500">{user?.email}</p>
-        </div>
-        <div className="w-[90%] mx-auto p-[0.01rem] bg-gray-300"></div>
-        <div className="_token">
-          <div className="flex justify-between p-5 px-10 ">
-            <p>Total cost</p>
-            <p>{tokens?.total_cost || "-"}</p>
-          </div>
-          <div className="w-[90%] mx-auto p-[0.01rem] bg-gray-300"></div>
-          <div className="flex justify-between p-5 px-10">
-            <p>Total tokens </p>
-            <p>{tokens?.total_tokens || "-"} </p>
-          </div>
-          <div className="w-[90%] mx-auto p-[0.01rem] bg-gray-300"></div>
-          <div className="flex justify-between p-5 px-10">
-            <p>Token used</p>
-            <p>{tokens?.completion_tokens || "-"} </p>
-          </div>
-        </div>
-        <div className="w-[90%] mx-auto p-[0.01rem] bg-gray-300"></div>
-        <div className="flex   gap-3 justify-center mt-16">
-          <a
-            href="https://discord.com/api/oauth2/authorize?client_id=1148310552813256743&permissions=28582203096305&scope=bot"
-            className="cursor-pointer"
-            target="_blank"
-          >
-            <Image
-              src="https://storage.googleapis.com/replit/images/1655786714330_691070e643aa6e650e52f6c3e26f3c33.png"
-              alt="Telegram bot"
-              width={50}
-              height={50}
-              className="rounded-full "
-            />
-          </a>
-          <a
-            href="https://t.me/QuesAns2_aiBot"
-            className="cursor-pointer"
-            target="_blank"
-          >
-            <Image
-              width={50}
-              height={50}
-              src="https://flowxo.com/wp-content/uploads/2021/03/Telegram-Logo-512x512.png"
-              alt="Telegram bot"
-              className="rounded-full "
-            />
-          </a>
-        </div>
-        <div className="mt-6 flex justify-center">
-          <button
-            // disabled={false}
-            onClick={handleUpload}
-            className=" text-white bg-gray-600 font-medium rounded-md text-sm w-full sm:w-auto block px-8 py-2.5 text-center"
-          >
-            Upload
-          </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Cinzel&family=Cinzel+Decorative&family=Poppins:wght@200;300;400;500;600;700&display=swap");
 /* .text_bg {
   background-image: url(pdf.png);
   background-repeat: repeat;
@@ -17,17 +18,60 @@
   -webkit-font-smoothing: antialiased;
 } */
 
+body {
+  font-family: "Poppins", sans-serif;
+}
+.user-header {
+  background: linear-gradient(270deg, #71ddb1 -9.55%, #1a4fba 50%, #1a4fba 50%);
+  border-radius: 6.95079px;
+}
+
 .my-div::-webkit-scrollbar {
-  width: 12px; /* Set the width of the scrollbar */
+  width: 6px; /* Set the width of the scrollbar */
+}
+/* chat loader */
+/* $blur: 20px;
+$bubble-color: #000;
+$contrast: 60; */
+
+.dot {
+  animation: dot-pulse 0.9s ease both infinite;
+  background: #1a4fba;
+  border-radius: 100%;
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+}
+
+.dot--one {
+  animation-delay: 0;
+}
+.dot--two {
+  animation-delay: 0.3s;
+}
+.dot--three {
+  animation-delay: 0.6s;
+}
+
+@keyframes dot-pulse {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
 }
 
 /* Define the scrollbar thumb (the draggable part) */
 .my-div::-webkit-scrollbar-thumb {
-  background-color: #888; /* Set the color of the thumb */
+  background-color: #1a4fba; /* Set the color of the thumb */
   border-radius: 6px; /* Add rounded corners to the thumb */
 }
 
 /* Define the scrollbar track on hover */
 .my-div::-webkit-scrollbar-thumb:hover {
-  background-color: #555; /* Change color on hover */
+  background-color: #1a4fba; /* Change color on hover */
 }
